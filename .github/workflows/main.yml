@@ -1,0 +1,26 @@
+name: Check test.txt
+
+on:
+  push:
+    paths:
+      - test.txt
+  pull_request:
+    paths:
+      - test.txt
+
+jobs:
+  check-test-file:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Check content of test.txt
+        run: |
+          if grep -qv "success" test.txt; then
+            echo "test.txt does not contain 'success'. Failing the action."
+            exit 1
+          else
+            echo "test.txt contains 'success'."
+          fi
